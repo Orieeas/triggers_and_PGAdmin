@@ -1,0 +1,31 @@
+version: '3'
+services:
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgresql://your_username:your_password@db:5432/postgres
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: your_username
+      POSTGRES_PASSWORD: your_password
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database/init2.sql:/docker-entrypoint-initdb.d/init2.sql
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: your_email@mm.ru
+      PGADMIN_DEFAULT_PASSWORD: your_password
+    ports:
+      - 8080:80
+    depends_on:
+      - db
